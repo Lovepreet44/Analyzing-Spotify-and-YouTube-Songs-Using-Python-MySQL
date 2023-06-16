@@ -108,3 +108,99 @@ def Irrelevant_Track_name():
     df=df[~df['Track'].str.startswith('?')]
     return df
 
+#Task 8: Calculate the Energy to Liveness ratio for each track and store it in columns 'EnergyLiveness'
+def Energy_to_liveness_Ratio():
+    df=Irrelevant_Track_name()
+    df['EnergyLiveness']=(pd.to_numeric(df['Energy'])/pd.to_numeric(df['Liveness']))
+    return df
+
+#Task 9: change the datatype of 'views' to float for further use
+def change_the_datatype():
+    df=Energy_to_liveness_Ratio()
+    df['Views']=pd.to_numeric(df['Views'])
+    return df
+
+#Task 10: compare the views and stream columns to infer
+# that the song track was more played on which platform, youtube or Spotify.
+# Create a column named most_playedon which will have two values.
+# Spotify and Youtube,If a song track is most played on youtube then
+# the most_played on column will have youtube as the value for that particular song
+def compare_the_views():
+    df=change_the_datatype()
+    df['most_playedon']=np.where(pd.to_numeric(df['Stream'])>pd.to_numeric(df["Views"]),"Spotify","Youtube")
+    return df
+
+#Task 11: export the cleaned dataset to CSV to "cleaned_dataset.csv"
+def export_the_cleaned_dataset():
+    df=compare_the_views()
+    df.to_csv("cleaned_dataset.csv",index=False)
+    
+
+#TASK 12
+#follow the instruction in the Task 13 description and complete the task as per it.
+
+#check if mysql table is created using "cleaned_dataset.csv"
+#Use this final dataset and upload it on the provided database for performing analysis in  MySQL
+#To run this task click on the terminal and click on the run project
+```
+# Module 2: Data Analysis using SQL
+
+* In this module, we worked on performing data analysis on the pre-processed data from the previous module and conducting Data Analysis using SQL.
+* We generated queries for given problem statements. We performed queries after making connection to phpmyadmin database server.
+
+## Task 1 : Write an SQL query to solve the given problem statement.
+
+* Which is the most viewed song track on youtube?
+## Task 2 : Write an SQL query to solve the given problem statement.
+
+* Which Song track is streamed most on Spotify?
+## Task 3 : Write an SQL query to solve the given problem statement.
+
+* EnergyLiveness ratio is one of the popular ways to measure the quality of a song, which are the top 5 songs that have the highest energyliveness ratio.
+## Task 4 : Write an SQL query to solve the given problem statement.
+
+* Let us assume a situation where an artist named Black Eyed Peas wants to analyze his songs. The artist wants to know which platform is capable of keeping his song track more engaged. To check this he assigns you this task and wants you to report to him where his song tracks are more played on. compare the platforms.
+## Task 5 : Write an SQL query to solve the given problem statement.
+
+* Gorillaz wants to know their most liked song on youtube. Report to them with their most liked song along with the Energy and Tempo of the song.
+
+## Task 6 : Write an SQL query to solve the given problem statement.
+
+* Which Album types are more prominent on Spotify?
+
+## Task 7 : Write an SQL query to solve the given problem statement.
+
+* Spotify's most loved song tracks are to be declared soon. Help Spotify choose the top 5 most streamed+youtube viewed song track.
+## All the queries to solve the above mentioned problem statements :
+``` sql
+##code
+# Solution: Task 1 : 
+SELECT track,Views FROM cleaned_dataset ORDER BY Views DESC LIMIT 1;
+
+##code
+# Solution : Task 2 : 
+SELECT track,Stream FROM cleaned_dataset WHERE most_playedon="spotify" ORDER BY Stream DESC LIMIT 1;
+
+##code
+# Solution : Task 3 : 
+SELECT track,EnergyLiveness FROM cleaned_dataset ORDER BY EnergyLiveness DESC LIMIT 5;
+
+##code
+# Solution : Task 4 : 
+SELECT COUNT(track),most_playedon FROM cleaned_dataset WHERE artist="Black Eyed Peas" GROUP BY most_playedon;
+
+##code
+# Solution : Task 5 : 
+SELECT track,likes,energy,tempo FROM cleaned_dataset WHERE artist="gorillaz" AND most_playedon="spotify" ORDER BY Likes DESC LIMIT 1;
+
+##code
+# Solution : Task 6 : 
+SELECT album_type,COUNT(album_type) AS total FROM cleaned_dataset GROUP BY album_type ORDER BY total DESC;
+
+##code
+# Solution : Task 7 : 
+SELECT track,Views + Stream AS total FROM cleaned_dataset WHERE most_playedon="youtube" GROUP BY track ORDER BY total DESC LIMIT 5;
+
+```
+
+

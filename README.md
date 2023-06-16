@@ -49,4 +49,28 @@ Data Pre-processing is one of the important steps in data analytics because data
 * Task 8 : Energy to Liveness Ration Calculation : Analysing the relationship and storing results(Compute the Energy to Liveness ratio for each track, quantifying the relationship between energy and liveliness attributes. The resulting ratios are then stored in a column named 'EnergyLiveness' for further analysis or interpretation).<br />
 * Task 9 : Data Type Conversion : Transforming 'Views' to float for enhanced usability(Modify the data type of the 'views' column to float, enabling numerical operations and facilitating its utilization in subsequent analysis or calculations requiring floating-point values.<br />
 * Task 10 : Platform Dominance Analysis : Identifying most played platform and creating 'Most_Playedon' column(Analyze the 'views' and 'stream' columns to determine the dominant platform (YouTube or Spotify) on which a song track was most played. Create a new column called 'most_playedon' with values 'Spotify' or 'YouTube' indicating the platform with the highest play count for each song track).<br />
-* Task 11 : Data Export and Download : Saving and accessing 'Cleaned_dataset.csv'(Export the data to a CSV file named 
+* Task 11 : Data Export and Download : Saving and accessing 'Cleaned_dataset.csv'(Export the data to a CSV file named "cleaned_dataset.csv" and enable downloading by providing a clickable file name, allowing users to access and retrieve the file with ease).<br />
+* Task 12 : Module 1 completion : Creating MySQL Table from exported 'Cleaned_dataset.csv'(Create a MySQL table named "cleaned_dataset" by utilizing the exported file, "cleaned_dataset.csv". Follow these steps: 1. Download the CSV file. 2. Create the table using the CSV file, either through an online editor or by executing SQL commands. 3. Click "Run Test" to conclude Module 1).<br />
+# All python codes for Data-Preprocessing and converting to new csv file.
+``` py
+import pandas as pd
+import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
+
+
+
+#Task 1: Remove columns that are not needed in our analysis.
+# Remove Url_spotify, Uri, Key, Url_youtube, Description
+def Remove_columns():
+    df = pd.read_csv('Spotify_Youtuben.csv')
+    df.drop(columns=['Url_spotify','Uri','Key','Url_youtube','Description'],axis=1,inplace=True)
+    return df
+
+
+#Task 2: Check for the null values
+def no_of_null_values():
+    df=Remove_columns()
+    df=df.isna().sum()
+    return df
+    

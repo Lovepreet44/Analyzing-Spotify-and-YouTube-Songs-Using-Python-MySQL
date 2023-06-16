@@ -67,10 +67,44 @@ def Remove_columns():
     df.drop(columns=['Url_spotify','Uri','Key','Url_youtube','Description'],axis=1,inplace=True)
     return df
 
-
 #Task 2: Check for the null values
 def no_of_null_values():
     df=Remove_columns()
     df=df.isna().sum()
     return df
-    
+
+#Task 3: Handle the null values replace int value with 0 and other values with NA
+def Handle_Null_values():
+    df=Remove_columns()
+    for i in df.columns:
+        if df[i].dtypes=="float64":
+            df[i].fillna(0,inplace=True)
+        if df[i].dtypes=="object":
+            df[i].fillna("NA",inplace=True)
+    return df
+
+#Task 4: CHECK FOR DUPLICATES AND REMOVE THEM KEEPING THE FIRST VALUE
+def drop_the_duplicates():
+    df=Handle_Null_values()
+    df.drop_duplicates(keep="first",inplace=True)
+    return df
+
+#Task 5: CONVERT millisecond duration to minute for a better understanding
+def convert_milisecond_to_Minute():
+    df=drop_the_duplicates()
+    df['Duration_ms']=pd.to_numeric(df['Duration_ms'])
+    df['Duration_ms']=(df['Duration_ms']/(60000.0))
+    return df
+
+#Task 6: Rename the modified column to Duration_min
+def rename_modified_column():
+    df=convert_milisecond_to_Minute()
+    df.rename(columns={"Duration_ms":"Duration_min"},inplace=True)
+    return df
+
+#Task 7: Remove irrelevant 'Track' name that starts with ?
+def Irrelevant_Track_name():
+    df=rename_modified_column()
+    df=df[~df['Track'].str.startswith('?')]
+    return df
+
